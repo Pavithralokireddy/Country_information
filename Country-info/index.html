@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Country Guide App</title>
+    <!--Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="search-wrapper">
+        <input
+          type="text"
+          id="country-inp"
+          placeholder="Enter a country name here..."
+        />
+        <button id="search-btn">Search</button>
+      </div>
+      <div id="result"></div>
+    </div>
+    <!-- Script -->
+    
+  </body>
+</html>
+
+<script>
+
+let searchBtn = document.getElementById("search-btn");
+let countryInp = document.getElementById("country-inp");
+searchBtn.addEventListener("click", () => {
+  let countryName = countryInp.value;
+  let finalURL = `https://restcountries.com/v3.1/name/${countryName}?fullText=true`;
+  console.log(finalURL);
+  fetch(finalURL)
+    .then((response) => response.json())
+    .then((data) => {
+      //   console.log(data[0]);
+      //   console.log(data[0].capital[0]);
+      //   console.log(data[0].flags.svg);
+      //   console.log(data[0].name.common);
+      //   console.log(data[0].continents[0]);
+      //   console.log(Object.keys(data[0].currencies)[0]);
+      //   console.log(data[0].currencies[Object.keys(data[0].currencies)].name);
+      //   console.log(
+      //     Object.values(data[0].languages).toString().split(",").join(", ")
+      //   );
+      result.innerHTML = `
+        <img src="${data[0].flags.svg}" class="flag-img">
+        <h2>${data[0].name.common}</h2>
+        <div class="wrapper">
+            <div class="data-wrapper">
+                <h4>Capital:</h4>
+                <span>${data[0].capital[0]}</span>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="data-wrapper">
+                <h4>Continent:</h4>
+                <span>${data[0].continents[0]}</span>
+            </div>
+        </div>
+         <div class="wrapper">
+            <div class="data-wrapper">
+                <h4>Population:</h4>
+                <span>${data[0].population}</span>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="data-wrapper">
+                <h4>Currency:</h4>
+                <span>${
+                  data[0].currencies[Object.keys(data[0].currencies)].name
+                } - ${Object.keys(data[0].currencies)[0]}</span>
+            </div>
+        </div>
+         <div class="wrapper">
+            <div class="data-wrapper">
+                <h4>Common Languages:</h4>
+                <span>${Object.values(data[0].languages)
+                  .toString()
+                  .split(",")
+                  .join(", ")}</span>
+            </div>
+        </div>
+      `;
+    })
+    .catch(() => {
+      if (countryName.length == 0) {
+        result.innerHTML = `<h3>The input field cannot be empty</h3>`;
+      } else {
+        result.innerHTML = `<h3>Please enter a valid country name.</h3>`;
+      }
+    });
+});
+
+
+</script>
